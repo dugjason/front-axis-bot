@@ -50,8 +50,10 @@ async function processConversation(message: string, conversationId: string) {
   await front.addComment(conversationId, `AXIS score: **${axis}** - ${axisRange}
   **RA: ${ra.score}**
   - _${ra.explanation}_
+
   **IE: ${ie.score}**
   - _${ie.explanation}_
+  
   **HS: ${hs.score}**
   - _${hs.explanation}_`);
 }
