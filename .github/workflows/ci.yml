@@ -25,15 +25,22 @@ jobs:
           node-version: 22
           cache: pnpm
 
-      - shell: bash
-        run: pnpm install
-
   typecheck:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: 
       - setup
     steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - shell: bash
+        run: pnpm install
       - name: Typecheck
         run: pnpm run typecheck
 
