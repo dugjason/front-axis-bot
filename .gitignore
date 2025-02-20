@@ -10,9 +10,3 @@
 
 # Node modules
 node_modules
-
-# Lock files
-yarn.lock
-package-lock.json
-pnpm-lock.yaml
-bun.lockb

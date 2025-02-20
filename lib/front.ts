@@ -9,14 +9,14 @@ export class Front {
   private accessToken: string
   private headers: {
     Authorization: string
-    'Content-Type': string
+    "Content-Type": string
   }
 
   constructor({ accessToken }: { accessToken: string }) {
     this.accessToken = accessToken
     this.headers = {
-      'Authorization': `Bearer ${this.accessToken}`,
-      'Content-Type': 'application/json'
+      Authorization: `Bearer ${this.accessToken}`,
+      "Content-Type": "application/json",
     }
   }
 
@@ -27,7 +27,7 @@ export class Front {
    */
   async fetchConversation(conversationId: string) {
     const res = await fetch(`https://api2.frontapp.com/conversations/${conversationId}`, {
-      headers: this.headers
+      headers: this.headers,
     })
     return res.json()
   }
@@ -41,15 +41,15 @@ export class Front {
   async updateConversation(conversationId: string, data: AxisData): Promise<void> {
     await this.sendRequest(
       `/conversations/${conversationId}`,
-      'PATCH',
+      "PATCH",
       JSON.stringify({
         custom_fields: {
           "AXIS Score": data.axis,
           "AXIS: RA": data.ra,
           "AXIS: IE": data.ie,
-          "AXIS: HS": data.hs
-        }
-      })
+          "AXIS: HS": data.hs,
+        },
+      }),
     )
 
     console.log(`Updated conversation ${conversationId}`)
@@ -63,25 +63,21 @@ export class Front {
   async addComment(conversationId: string, comment: string): Promise<void> {
     await this.sendRequest(
       `/conversations/${conversationId}/comments`,
-      'POST',
-      JSON.stringify({ body: comment })
+      "POST",
+      JSON.stringify({ body: comment }),
     )
   }
 
   /**
-   * Create a tag. 
+   * Create a tag.
    * Note Front's API uses a "find or create" strategy, so if the tag already exists with the provided name, it will be returned.
    * @param name - The name of the tag
    * @returns The ID of the created tag
    */
   async createTag(name: string): Promise<string> {
-    const response = await this.sendRequest(
-      `/tags`,
-      'POST',
-      JSON.stringify({ name })
-    )
+    const response = await this.sendRequest("/tags", "POST", JSON.stringify({ name }))
 
-    return response.id as string
+    return (response as { id: string }).id
   }
 
   /**
@@ -92,8 +88,8 @@ export class Front {
   async addTagsToConversation(conversationId: string, tagIds: Array<string>): Promise<void> {
     await this.sendRequest(
       `/conversations/${conversationId}/tags`,
-      'POST',
-      JSON.stringify({ tag_ids: tagIds })
+      "POST",
+      JSON.stringify({ tag_ids: tagIds }),
     )
   }
 
@@ -105,18 +101,23 @@ export class Front {
    * @param body - The body of the request
    * @returns The response from the request
    */
-  private async sendRequest(path: `/${string}`, method: 'GET' | 'POST' | 'PATCH', body?: string, attempt?: number): Promise<any> {
+  private async sendRequest(
+    path: `/${string}`,
+    method: "GET" | "POST" | "PATCH",
+    body?: string,
+    attempt?: number,
+  ): Promise<object> {
     const attempts = attempt ?? 1
     const res = await fetch(`https://api2.frontapp.com${path}`, {
       method,
       headers: this.headers,
-      body: body ?? undefined
+      body: body ?? undefined,
     })
 
     if (!res.ok) {
       if (res.status === 429) {
         // Wait for 3 or more seconds and trys again. Front's API returns a 429 if the rate limit is exceeded.
-        await new Promise(resolve => setTimeout(resolve, 3_000 * attempts))
+        await new Promise((resolve) => setTimeout(resolve, 3_000 * attempts))
         return this.sendRequest(path, method, body, attempts + 1)
       }
 
@@ -125,11 +126,10 @@ export class Front {
 
     if (res.status === 204) {
       return {
-        success: true
+        success: true,
       }
     }
 
     return await res.json()
   }
 }
-

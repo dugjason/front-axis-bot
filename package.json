@@ -1,14 +1,12 @@
 {
   "name": "front-axis-bot",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Front Application Request endpoint, using the AI SDK to generate an AXIS score for Front conversations",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "typecheck": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["front", "vercel", "ai", "llm"],
+  "author": "Jason Dugdale @ Front <api@frontapp.com>",
   "license": "ISC",
   "dependencies": {
     "@ai-sdk/google": "^1.1.16",
@@ -18,6 +16,7 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@types/node": "^22.13.4",
     "@vercel/node": "^5.1.7",
     "typescript": "^5.7.3"
