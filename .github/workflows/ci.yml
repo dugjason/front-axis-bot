@@ -8,6 +8,8 @@ on:
 
 jobs:
   setup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,9 +41,6 @@ jobs:
     needs: 
       - setup
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
         with:
@@ -49,10 +48,3 @@ jobs:
 
       - name: Run Biome
         run: biome ci .
-
-      - name: Something tsomething
-        steps:
-          - name: Something
-            run: echo "Something"
-          - name: Something else
-            run: echo "Something else"
